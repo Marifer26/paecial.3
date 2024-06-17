@@ -4,24 +4,28 @@ import heapq
 
 def prim_mst(graph):
     """
-    Función que implementa el algoritmo de Prim para encontrar el MST de un grafo.
-    Devuelve el árbol parcial mínimo como un grafo networkx.
+    Implementación del algoritmo de Prim para encontrar el Árbol Parcial Mínimo (MST) de un grafo.
+    
+    Args:
+    - graph: Grafo representado como un objeto networkx.Graph
+    
+    Returns:
+    - min_spanning_tree: Árbol parcial mínimo como un objeto networkx.Graph
     """
-    min_spanning_tree = nx.Graph()
-    # Seleccionamos un nodo inicial arbitrario (en este caso el primero)
-    start_node = list(graph.nodes())[0]
-    # Estructura para manejar los bordes candidatos (usamos un heap para obtener el mínimo rápido)
-    heap = [(0, start_node, start_node)]  # (peso, nodo de origen, nodo de destino)
-    visited = set()
+    min_spanning_tree = nx.Graph()  # Creamos un nuevo grafo para almacenar el MST
+    start_node = list(graph.nodes())[0]  # Elegimos un nodo inicial arbitrario (en este caso el primero)
+    heap = [(0, start_node, start_node)]  # Utilizamos un heap para manejar los bordes candidatos
+    visited = set()  # Conjunto para mantener los nodos visitados
 
     while heap:
-        weight, u, v = heapq.heappop(heap)
+        weight, u, v = heapq.heappop(heap)  # Obtenemos el borde de peso mínimo del heap
         if v not in visited:
-            visited.add(v)
-            min_spanning_tree.add_edge(u, v, weight=weight)
+            visited.add(v)  # Añadimos el nodo v a los nodos visitados
+            min_spanning_tree.add_edge(u, v, weight=weight)  # Añadimos el borde al MST
+            # Iteramos sobre los vecinos de v
             for neighbor, weight in graph[v].items():
                 if neighbor not in visited:
-                    heapq.heappush(heap, (weight['weight'], v, neighbor))
+                    heapq.heappush(heap, (weight['weight'], v, neighbor))  # Añadimos los bordes candidatos al heap
 
     return min_spanning_tree
 
@@ -39,20 +43,21 @@ min_spanning_tree = prim_mst(G)
 # Dibujar el grafo original y el MST resultante
 plt.figure(figsize=(12, 6))
 
-# Grafo original
+# Dibujar el grafo original
 plt.subplot(121)
-pos = nx.spring_layout(G)  # Posición de los nodos
+pos = nx.spring_layout(G)  # Calcular la posición de los nodos usando un layout de spring
 nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='gray', font_weight='bold')
 nx.draw_networkx_edge_labels(G, pos, edge_labels={(u, v): d['weight'] for u, v, d in G.edges(data=True)})
 plt.title('Grafo Original')
 
-# MST resultante
+# Dibujar el MST resultante
 plt.subplot(122)
-pos = nx.spring_layout(min_spanning_tree)
+pos = nx.spring_layout(min_spanning_tree)  # Calcular la posición de los nodos usando un layout de spring
 nx.draw(min_spanning_tree, pos, with_labels=True, node_color='lightgreen', edge_color='green', font_weight='bold')
 nx.draw_networkx_edge_labels(min_spanning_tree, pos, edge_labels={(u, v): d['weight'] for u, v, d in min_spanning_tree.edges(data=True)})
 plt.title('Árbol Parcial Mínimo (MST)')
 
-plt.tight_layout()
-plt.show()
+plt.tight_layout()  # Ajustar el diseño de los subplots para que no se solapen
+plt.show()  # Mostrar el gráfico
+
 
