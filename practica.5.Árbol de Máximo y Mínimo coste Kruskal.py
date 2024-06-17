@@ -76,4 +76,3 @@ plt.show()  # Muestra el gráfico
 # simplemente cambia la línea que ordena las aristas a:
 # edges_sorted = sorted(graph['edges'], key=lambda edge: edge[2], reverse=True)
 
-
